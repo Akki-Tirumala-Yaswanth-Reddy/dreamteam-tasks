@@ -1,0 +1,26 @@
+POST http://127.0.0.1:5000/api/signup
+Content-Type: application/json
+
+{
+    "username": "Dheeru",
+    "password": "dheerupass",
+    "email": "dheeru@gmail.com"
+}
+
+###
+POST http://127.0.0.1:5000/api/login 
+Content-Type: application/json
+
+{
+    "username": "Sriram",
+    "password": "sriram_pass"
+}
+
+###
+GET http://127.0.0.1:5000/api/login
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc1Nzc3ODk2OSwianRpIjoiYTQxNTE0YzUtYzc0Zi00YTk4LWEyZDYtNjgwOTM2ZmFjNjJkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IlNyaXJhbSIsIm5iZiI6MTc1Nzc3ODk2OSwiY3NyZiI6IjRkZjU5N2NlLTI0MTMtNDZiOS1hNTYxLWFjMTM3MmRmNmIxMCIsImV4cCI6MTc1Nzc3OTg2OX0.bcicUpn1KflVe58o5pthhMSTVKdHD5DErHcDl3XyI34
+Content-Type: application/json
+
+{
+    "username": "Sriram"
+}
