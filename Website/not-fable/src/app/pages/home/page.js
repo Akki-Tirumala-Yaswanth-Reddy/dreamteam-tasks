@@ -1,5 +1,4 @@
 import NavBar from "@/app/components/Navbar";
-import SearchBar from "@/app/components/SearchBar";
 import ThreeBlock from "@/app/components/ThreeBlock";
 
 export default function Home(){

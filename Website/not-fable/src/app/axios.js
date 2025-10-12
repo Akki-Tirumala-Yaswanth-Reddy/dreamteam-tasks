@@ -30,11 +30,9 @@ api.interceptors.response.use(
                 });
                 const { access_token } = response.data;
                 localStorage.setItem('accessToken', access_token);
-                // Retry original request with new token
                 originalRequest.headers.Authorization = `Bearer ${access_token}`;
                 return api(originalRequest);
             } catch (refreshError) {
-                // Refresh failed, redirect to login
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
                 window.location.href = '/pages/login';

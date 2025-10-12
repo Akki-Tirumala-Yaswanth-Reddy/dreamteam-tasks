@@ -73,7 +73,7 @@ def createReview(user_id: str, google_id: str, heading: str, content: str, ratin
 
         book.update(push__reviews=review)
         
-        return True, struct_review(review), None  # FIX: Return serialized review
+        return True, struct_review(review), None
         
     except ValidationError as e:
         return False, None, f"Validation error: {str(e)}"
