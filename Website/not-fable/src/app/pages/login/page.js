@@ -3,12 +3,14 @@ import { useState } from "react";
 import api from "@/app/axios";
 import Modal from "@/app/components/Modal";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function loginPage(){
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [modalMessage, setModalMessage] = useState('');
     const [popup, setPopup] = useState(false);
+    const router = useRouter();
 
     function onClose(){
         setPopup(false);
@@ -18,58 +20,81 @@ function loginPage(){
         e.preventDefault();
         try{
             if (password.trim() === '' || username.trim() === ''){
-                alert("Username and password cant be empty");
+                setModalMessage("Username and password cant be empty");
+                setPopup(true);
+                return;
             }
             else{
-                const response = await api.post('/login', {username: username, password: password});
-                setModalMessage("You have been signed in.");
-                setPopup(true);
-                // Storing the refresh_token in local storage, not recommended but is used for demonstration purposes. Prefered way is storing them in httpOnly cookie.
-                localStorage.setItem('refresh_token', response.data.refresh_token);
-                console.log(response.data);
+                const response = await api.post('/auth/login', {username: username, password: password});
+                localStorage.setItem('refreshToken', response.data.refresh_token);
+                localStorage.setItem('accessToken', response.data.access_token);
+                localStorage.setItem('user_id', response.data.user_id);
+                router.push("/pages/home");
             }
         }
-        catch(e){
-            setModalMessage(e.response.data.error);
+        catch(err){
+            console.error('Login error:', err);
+            
+            let errorMessage = "Login failed";
+            
+            if (err.response) {
+                errorMessage = err.response.data?.error || "Server error";
+            } else if (err.request) {
+                errorMessage = "Network error - please check if the server is running and CORS is configured";
+            } else {
+                errorMessage = err.message || "An unexpected error occurred";
+            }
+            
+            setModalMessage(errorMessage);
             setPopup(true);
         }
     }
 
     return (
         <>
-            <nav className="bg-linear-to-r/decreasing from-indigo-500 to-teal-400 bg-cover border-b-1 border-indigo-200 p-5">
-                <div className="">
-                    <h1 className="font-bold text-white text-4xl">!Fable</h1>
-                </div>
+            <nav className="flex justify-between">
+                <h1 className="font-semibold text-4xl ml-4 my-6">📖 Not Fable</h1>
+                <button className="my-6 p-2 mx-3 rounded-xl text-white font-semibold bg-purple-700 active:inset-ring-1 active:bg-teal-400 active:scale-106 duration-40 ease-in-out">
+                    <Link href='/pages/signup'>Sign up</Link>
+                </button>
             </nav>
-            <div className="flex flex-col justify-center items-center h-screen w-screen bg-linear-to-r/decreasing from-indigo-500 to-teal-400 bg-cover">
+            <div className="flex bg-gray-100 h-screen w-screen">
                 {popup && <Modal onClose={onClose} message={modalMessage}/>}
-                <div className="flex flex-col justify-center p-10 rounded-2xl w-full max-w-md bg-white/30 backdrop-blur-sm">
-                    <label htmlFor="username"
-                    className="pb-3 text-3xl font-semibold">
-                        Username</label>
-                    <input id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="border rounded-md mb-3 p-1"/>
+                <div className="flex flex-col pt-50 items-center w-full">
+                    <h2 className="text-4xl text-center">📖</h2>
+                    <h2 className="text-4xl text-center font-bold mb-5">Welcome back!</h2>
+                    <div className="bg-white p-3 flex flex-col min-w-md rounded-2xl">
+                        <h1 className="font-semibold text-3xl my-3 text-center">Login</h1>
 
-                    <label htmlFor="password"
-                    className="pb-3 text-3xl font-semibold"
+                        <label 
+                        className="text-2xl font-semibold p-3"
+                        htmlFor="username"
+                        >Username</label>
+                        <input
+                        className="p-1 mx-3 border rounded-sm"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                        id="username"/>
+
+                        <label className="text-2xl font-semibold p-3"
+                        htmlFor="password"
                         >Password</label>
-                    <input id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="border rounded-md mb-3 p-1"/>
+                        <input 
+                        className="p-1 mx-3 border rounded-sm mb-5"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        id="password"/>
 
-                    <div className="flex justify-between">
-                        <button className="mt-3 p-2 rounded-xl  text-white font-semibold bg-purple-700 hover:inset-ring-1 hover:bg-teal-400 hover:scale-106 duration-100 ease-in-out"
-                        onClick={submitLogin}
-                        >
-                            Login
-                        </button>
-                        <button className="mt-3 p-2 rounded-xl text-white font-semibold bg-teal-400 hover:inset-ring-1 hover:bg-purple-700 hover:scale-106 duration-40 ease-in-out">
-                            <Link href="/pages/signup">Signup</Link>
-                        </button>
+                        <div className="flex justify-between px-3 my-3">
+                            <button 
+                            className="p-2 rounded-xl text-white font-semibold bg-purple-700 active:inset-ring-1 active:bg-teal-400 active:scale-106 duration-40 ease-in-out"
+                            onClick={submitLogin}
+                            >
+                                Login</button>
+                            <button 
+                            className="p-2 rounded-xl text-white font-semibold bg-teal-400 active:inset-ring-1 active:bg-purple-700 active:scale-106 duration-40 ease-in-out"
+                                ><Link href='/pages/signup'>Sign up</Link></button>
+                        </div>
                     </div>
                 </div>
             </div>

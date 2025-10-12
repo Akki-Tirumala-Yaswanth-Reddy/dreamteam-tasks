@@ -1,6 +1,6 @@
 'use client';
 import { useState } from "react";
-import api from "@/app/axios";
+import {api2} from "@/app/axios";
 import Modal from "@/app/components/Modal";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -32,7 +32,7 @@ function signupPage(){
         }
         else {
             try{
-                await api.post('/signup',{username: username, password: password, email: email});
+                await api2.post('/auth/signup',{username: username, password: password, email: email});
                 router.push("/pages/login");
             }
             catch(e){
@@ -48,55 +48,68 @@ function signupPage(){
 
     return (
         <>
-            <nav className="bg-linear-to-r/decreasing from-indigo-500 to-teal-400 bg-cover border-b-1 border-indigo-200 p-5">
-                <div className="">
-                    <h1 className="font-bold text-white text-4xl">!Fable</h1>
-                </div>
+            <nav className="flex justify-between">
+                <h1 className="font-semibold text-4xl ml-4 my-6">📖 Not Fable</h1>
+                <button className="my-6 p-2 mx-3 rounded-xl text-white font-semibold bg-purple-700 active:inset-ring-1 active:bg-teal-400 active:scale-106 duration-40 ease-in-out">
+                    <Link href='/pages/login'>Login</Link>
+                </button>
             </nav>
-            <div className="flex justify-center items-center h-screen w-screen bg-linear-to-r/decreasing from-indigo-500 to-teal-400 bg-cover">
-            {popup && <Modal onClose={onClose} message={modalMessage}/>}
-                <div className="flex flex-col justify-center p-10 rounded-2xl w-full max-w-md bg-white/30 backdrop-blur-sm">
-                    <label htmlFor="username"
-                    className="pb-3 text-3xl font-semibold">
-                        Username</label>
-                    <input id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="border rounded-md mb-3 p-1"/>
+            <div className="flex bg-gray-100 h-screen w-screen">
+                {popup && <Modal onClose={onClose} message={modalMessage}/>}
+                <div className="flex flex-col pt-30 items-center w-full">
+                    <h2 className="text-4xl text-center">📖</h2>
+                    <h2 className="text-4xl text-center font-bold mb-5">Hello!!</h2>
+                    <div className="bg-white p-3 flex flex-col min-w-md rounded-2xl">
+                        <h1 className="font-semibold text-3xl my-3 text-center">Sign Up</h1>
 
-                    <label htmlFor="email"
-                    className="pb-3 text-3xl font-semibold"
+                        <label 
+                        className="text-2xl font-semibold p-3"
+                        htmlFor="username"
+                        >Username</label>
+                        <input
+                        className="p-1 mx-3 border rounded-sm"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                        id="username"/>
+
+                        <label 
+                        className="text-2xl font-semibold p-3"
+                        htmlFor="email"
                         >Email</label>
-                    <input id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="border rounded-md mb-3 p-1"/>
+                        <input
+                        className="p-1 mx-3 border rounded-sm"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        id="email"/>
 
-                    <label htmlFor="password"
-                    className="pb-3 text-3xl font-semibold"
+                        <label className="text-2xl font-semibold p-3"
+                        htmlFor="password"
                         >Password</label>
-                    <input id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="border rounded-md mb-3 p-1"/>
+                        <input 
+                        className="p-1 mx-3 border rounded-sm"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        id="password"/>
 
-                    <label htmlFor="password2"
-                    className="pb-3 text-3xl font-semibold"
-                        >Re-enter the password</label>
-                    <input id="password2"
-                    value={password2}
-                    onChange={(e) => setPassword2(e.target.value)}
-                    className="border rounded-md mb-3 p-1"/>
+                        <label className="text-2xl font-semibold p-3"
+                        htmlFor="password2"
+                        >Re-Enter the password</label>
+                        <input 
+                        className="p-1 mx-3 border rounded-sm mb-5"
+                        value={password2}
+                        onChange={e => setPassword2(e.target.value)}
+                        id="password2"/>
 
-                    <div className="flex justify-between">
-                        <button className="mt-3 p-2 rounded-xl  text-white font-semibold bg-purple-700 hover:inset-ring-1 hover:bg-teal-400 hover:scale-106 duration-100 ease-in-out"
-                        onClick={submitSignup}
-                        >
-                            Signup
-                        </button>
-                        <button className="mt-3 p-2 rounded-xl text-white font-semibold bg-teal-400 hover:inset-ring-1 hover:bg-purple-700 hover:scale-106 duration-40 ease-in-out">
-                            <Link href="/pages/login">Login</Link>
-                        </button>
+                        <div className="flex justify-between px-3 my-3">
+                            <button 
+                            className="p-2 rounded-xl text-white font-semibold bg-purple-700 active:inset-ring-1 active:bg-teal-400 active:scale-106 duration-40 ease-in-out"
+                            onClick={submitSignup}
+                            >
+                                Signup</button>
+                            <button 
+                            className="p-2 rounded-xl text-white font-semibold bg-teal-400 active:inset-ring-1 active:bg-purple-700 active:scale-106 duration-40 ease-in-out"
+                                ><Link href='/pages/login'>Login</Link></button>
+                        </div>
                     </div>
                 </div>
             </div>

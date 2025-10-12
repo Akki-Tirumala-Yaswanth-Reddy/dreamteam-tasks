@@ -12,7 +12,6 @@ signup_bp = Blueprint('signup', __name__)
 @signup_bp.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
-    print(data)
     username = data['username']
     password = data['password']
     email = data['email']
@@ -44,27 +43,29 @@ def login():
         user_db = User.objects(username=data['username']).first()
         if not user_db:
             return jsonify({'error': "User is not found"}), 404
-        elif bcrypt.check_password_hash(user_db['password'], data['password']):
-            access_token = create_access_token(identity=user_db['username'])
-            refresh_token = create_refresh_token(identity=user_db['username'])
+        elif bcrypt.check_password_hash(user_db.password, data['password']):
+            access_token = create_access_token(identity=str(user_db.id))
+            refresh_token = create_refresh_token(identity=str(user_db.id))
             return jsonify({'message': "Success, the user has been logged in",
                             'access_token': access_token,
-                            'refresh_token': refresh_token
+                            'refresh_token': refresh_token,
+                            'user_id': str(user_db.id)
                             }), 200
-        return jsonify({'error': "Given password is wrong."}), 401
+        return jsonify({'error': "Given password is wrong."}), 403
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
-@login_bp.get('/login')
-@jwt_required()
-def loginGet():
-    data = request.get_json()
-    username = data['username']
 
+@login_bp.post('/refresh')
+@jwt_required(refresh=True)
+def refresh():
     try:
-        user_db = User.objects(username=username).first()
-        print(user_db)
-        return jsonify({'password': user_db['password']}), 200
+        current_user = get_jwt_identity()
+        new_access_token = create_access_token(identity=current_user)
+        return jsonify({
+            'access_token': new_access_token,
+            'message': 'Token refreshed successfully'
+        }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
