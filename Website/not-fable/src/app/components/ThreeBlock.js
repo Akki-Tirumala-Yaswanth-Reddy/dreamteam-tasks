@@ -46,12 +46,12 @@ export default async function BooksContainer(){
 function Block({book}){
     return (
         <>
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-4 group cursor-pointer">
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 p-4 cursor-pointer hover:scale-105 transition-transform duration-300">
                 <div className="aspect-[3/4] relative mb-4 overflow-hidden rounded-md">
                     <Image 
                         src={book.imageUrl}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="object-cover"
                         alt={book.title + "'s image"}
                     />
                 </div>
