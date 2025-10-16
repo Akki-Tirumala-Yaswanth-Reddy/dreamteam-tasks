@@ -12,3 +12,27 @@
 - Although the backend is ready for search functionality and followers mechanism, I couldnt implement it in the front end.
 - Except the error handling and some front end being left out, I tried my best to complete this main project.
 - Thank you
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+`Please select yaswanth 😽`
