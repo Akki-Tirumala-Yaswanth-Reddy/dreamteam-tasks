@@ -4,4 +4,4 @@ Not Fable is a full‑stack book discovery and personal library application. The
 
 On the backend, the project is organized into separate modules for routes, models, a database access layer (dbAPI), and an external integration layer (googleAPI), keeping request handling and business logic separated. Passwords are stored securely using hashing (BCrypt mentioned in the project documentation). The codebase is also structured to support additional features like search and a followers mechanism, even if parts of those flows were not completed in the UI.
 
-* Tech stack: Next.js 15, React 19, Tailwind CSS, Flask, MongoDB, JWT auth, Google Books API. *
+** Tech stack: Next.js 15, React 19, Tailwind CSS, Flask, MongoDB, JWT auth, Google Books API. **
